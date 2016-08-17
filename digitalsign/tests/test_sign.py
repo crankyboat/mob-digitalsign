@@ -1,13 +1,15 @@
 import unittest
-import hashlib
 import digitalsign
+import sha1
+
+# Test against SHA-1 implementation with pure Python https://github.com/ajalt/python-sha1
 
 class TestSign(unittest.TestCase):
 
     def setUp(self):
         self.testMsg = "Hello world from Mobivity San Diego!"
         self.testSecret = digitalsign.DEFAULT_SECRET
-        self.hashDigest = hashlib.sha1(self.testMsg+self.testSecret).hexdigest()
+        self.hashDigest = sha1.sha1(self.testMsg.encode()+self.testSecret.encode())
 
     def tearDown(self):
         pass
