@@ -17,8 +17,8 @@
     import digitalsign
 
     digitalsign.createSignature("hello world")
-    digitalsign.verifySignature("hello world", "hello hello")
-    digitalsign.verifySignature("hello world", "27fa4c2ccc38d7069d8cccb876e462d09134ebfc")
+    digitalsign.verifySignature("hello world", "hello hello:mew")
+    digitalsign.verifySignature("hello world", "458d54987fd217b86fdffb1fa9387875f6fe6e82:6d521f8728e741478bb5f59c12de2037")
 
 ## Testing
 

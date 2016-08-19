@@ -1,25 +1,28 @@
 import unittest
 import digitalsign
 import sha1
+import uuid
 
 # Test against SHA-1 implementation with pure Python https://github.com/ajalt/python-sha1
-
 class TestSign(unittest.TestCase):
 
     def setUp(self):
         self.testMsg = "Hello world from Mobivity San Diego!"
-        self.testSecret = digitalsign.DEFAULT_SECRET
-        self.hashDigest = sha1.sha1(self.testMsg.encode()+self.testSecret.encode())
 
     def tearDown(self):
         pass
 
     def testCreate(self):
-        self.assertEqual(self.hashDigest, digitalsign.createSignature(self.testMsg))
+        hashedMsg = digitalsign.createSignature(self.testMsg)
+        _,salt = hashedMsg.split(':')
+        testHashedMsg = sha1.sha1(self.testMsg.encode()+salt.encode()) + ':' + salt
+        self.assertEqual(hashedMsg, testHashedMsg)
 
     def testVerify(self):
-        self.assertTrue(digitalsign.verifySignature(self.testMsg, self.hashDigest))
-        self.assertFalse(digitalsign.verifySignature("Hello world.", self.hashDigest))
+        salt = uuid.uuid4().hex
+        testHashedMsg = sha1.sha1(self.testMsg.encode()+salt.encode()) + ':' + salt
+        self.assertTrue(digitalsign.verifySignature(self.testMsg, testHashedMsg))
+        self.assertFalse(digitalsign.verifySignature("Hello world.", testHashedMsg))
 
 if __name__ == '__main__':
     unittest.main()

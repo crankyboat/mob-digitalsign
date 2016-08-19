@@ -1,9 +1,10 @@
 import hashlib
-
-DEFAULT_SECRET = "holamobivitysd"
+import uuid
 
 def createSignature(message):
-    return hashlib.sha1(message.encode()+DEFAULT_SECRET.encode()).hexdigest()
+    salt = uuid.uuid4().hex
+    return hashlib.sha1(message.encode()+salt.encode()).hexdigest() + ':' + salt
 
-def verifySignature(message, digest):
-    return hashlib.sha1(message.encode()+DEFAULT_SECRET.encode()).hexdigest() == digest
+def verifySignature(message, hashedMessage):
+    digest, salt = hashedMessage.split(':')
+    return hashlib.sha1(message.encode()+salt.encode()).hexdigest() == digest
